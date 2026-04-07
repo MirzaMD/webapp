@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool UI Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideInUp 0.8s ease forwards;
+        }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.4s; }
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+        .card h3 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;  /* Safari/older Chrome */
+            background-clip: text;           /* Standard property */
+            -webkit-text-fill-color: transparent;
+            color: transparent;              /* Standard fallback */
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1>Welcome to Cool UI</h1>
+        <p>Experience a modern, aesthetically pleasing interface with smooth animations and gradients. Perfect for your next project.</p>
+    </section>
+    <section class="cards">
+        <div class="card">
+            <h3>Feature 1</h3>
+            <p>Stunning visuals with glassmorphism effects and responsive design that adapts to any screen.</p>
+            <a href="#" class="btn">Learn More</a>
+        </div>
+        <div class="card">
+            <h3>Feature 2</h3>
+            <p>Interactive elements with hover animations for an engaging user experience.</p>
+            <a href="#" class="btn">Get Started</a>
+        </div>
+        <div class="card">
+            <h3>Feature 3</h3>
+            <p>Built with pure CSS—no frameworks needed. Customize easily for your data viz or app needs.</p>
+            <a href="#" class="btn">Explore</a>
+        </div>
+    </section>
+</body>
+</html>
