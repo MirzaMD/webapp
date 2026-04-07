@@ -3,28 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cool UI Demo</title>
+    <title>Cool UI Demo | Enhanced Edition</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --grad-start: #667eea;
+            --grad-end: #764ba2;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #333;
+            --text-light: #666;
+            --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 30px 60px rgba(0,0,0,0.2);
+            --transition: all 0.4s ease;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-end) 100%);
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background 0.5s ease;
         }
+        
+        /* Theme variants */
+        body.theme-ocean {
+            --grad-start: #1e3c72;
+            --grad-end: #2a5298;
+        }
+        
+        body.theme-sunset {
+            --grad-start: #f12711;
+            --grad-end: #f5af19;
+        }
+        
+        body.theme-forest {
+            --grad-start: #11998e;
+            --grad-end: #38ef7d;
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* Scroll progress bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #fff, #ffd700);
+            z-index: 1001;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        
+        /* Hero section */
         .hero {
             text-align: center;
             padding: 100px 20px;
             color: white;
+            position: relative;
+            z-index: 2;
         }
+        
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
             opacity: 0;
             animation: fadeInUp 1s ease forwards;
         }
+        
         .hero p {
             font-size: 1.3rem;
             max-width: 600px;
@@ -32,6 +143,23 @@
             opacity: 0;
             animation: fadeInUp 1s ease 0.3s forwards;
         }
+        
+        /* Live clock */
+        .live-clock {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 8px 20px;
+            margin-top: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+        
+        /* Cards grid */
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -39,78 +167,560 @@
             padding: 60px 20px;
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
+        
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transition: all 0.4s ease;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             opacity: 0;
             transform: translateY(50px);
             animation: slideInUp 0.8s ease forwards;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .card:hover::before {
+            left: 100%;
+        }
+        
+        .card:nth-child(1) { animation-delay: 0.1s; }
         .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.4s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+        
         .card:hover {
             transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-hover);
         }
+        
         .card h3 {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;  /* Safari/older Chrome */
-            background-clip: text;           /* Standard property */
+            background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            color: transparent;              /* Standard fallback */
+            color: transparent;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
         }
+        
+        .card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        /* Card badge */
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        /* Button styles */
         .btn {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
             color: white;
             padding: 12px 30px;
             border-radius: 50px;
             text-decoration: none;
-            margin-top: 20px;
             transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
         }
+        
         .btn:hover {
             transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
+        
+        /* Stats section */
+        .stats-section {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 50px 20px;
+            margin: 40px 20px;
+            border-radius: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--grad-start);
+            transform: scale(1.05);
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 2000;
+            transition: transform 0.3s ease;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
         @keyframes fadeInUp {
             to { opacity: 1; transform: translateY(0); }
         }
+        
         @keyframes slideInUp {
             to { opacity: 1; transform: translateY(0); }
         }
+        
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .theme-toggle { top: 10px; right: 10px; padding: 6px 12px; font-size: 11px; }
+            .toast { font-size: 12px; white-space: nowrap; padding: 8px 16px; }
+            .stat-number { font-size: 1.8rem; }
+            .cta-section h2 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="particles" id="particles"></div>
+    
+    <button class="theme-toggle" id="themeToggle">
+        🎨 Switch Theme
+    </button>
+    
+    <button class="back-to-top" id="backToTop">↑</button>
+    
+    <div class="toast" id="toast">✨ Feature activated!</div>
+    
     <section class="hero">
-        <h1>Welcome to Cool UI</h1>
-        <p>Experience a modern, aesthetically pleasing interface with smooth animations and gradients. Perfect for your next project.</p>
+        <h1>✨ Cool UI Demo ✨</h1>
+        <p>Experience a modern, aesthetically pleasing interface with smooth animations, live interactions, and dynamic theming.</p>
+        <div class="live-clock" id="liveClock"></div>
     </section>
+    
     <section class="cards">
         <div class="card">
-            <h3>Feature 1</h3>
-            <p>Stunning visuals with glassmorphism effects and responsive design that adapts to any screen.</p>
-            <a href="#" class="btn">Learn More</a>
+            <div class="card-badge">🔥 NEW</div>
+            <h3>🎨 Dynamic Theme</h3>
+            <p>Switch between Ocean, Sunset, and Forest themes. Each theme transforms the entire UI with fresh gradients.</p>
+            <button class="btn" onclick="showToast('Theme switcher ready! Click the top-right button →')">Try Theme</button>
         </div>
         <div class="card">
-            <h3>Feature 2</h3>
-            <p>Interactive elements with hover animations for an engaging user experience.</p>
-            <a href="#" class="btn">Get Started</a>
+            <div class="card-badge">⭐ POPULAR</div>
+            <h3>💎 Glassmorphism</h3>
+            <p>Stunning frosted glass effects with backdrop blur and smooth shadows that adapt to any screen size.</p>
+            <button class="btn" onclick="showToast('Glassmorphism cards with blur effect active!')">Experience</button>
         </div>
         <div class="card">
-            <h3>Feature 3</h3>
-            <p>Built with pure CSS—no frameworks needed. Customize easily for your data viz or app needs.</p>
-            <a href="#" class="btn">Explore</a>
+            <div class="card-badge">⚡ INTERACTIVE</div>
+            <h3>✨ Particle System</h3>
+            <p>Floating particles that respond to your presence. Watch them dance in the background as you scroll.</p>
+            <button class="btn" onclick="showToast('✨ Particles are floating all around you!')">Enjoy</button>
+        </div>
+        <div class="card">
+            <div class="card-badge">📊 LIVE</div>
+            <h3>📈 Live Counter</h3>
+            <p>Interactive stats that animate when they come into view. Track engagement in real-time.</p>
+            <button class="btn" onclick="showToast('Scroll down to see stats animate!')">View Stats</button>
+        </div>
+        <div class="card">
+            <div class="card-badge">🕐 REAL-TIME</div>
+            <h3>⏰ Live Clock</h3>
+            <p>Dynamic clock with seconds that updates in real-time, showing your local time with style.</p>
+            <button class="btn" onclick="showToast(`Current time: ${new Date().toLocaleTimeString()}`)">Check Time</button>
+        </div>
+        <div class="card">
+            <div class="card-badge">🚀 SMOOTH</div>
+            <h3>📜 Scroll Magic</h3>
+            <p>Progress bar, back-to-top button, and smooth scrolling for a polished navigation experience.</p>
+            <button class="btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); showToast('Back to top! 🚀')">Go Top</button>
         </div>
     </section>
+    
+    <div class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" id="stat1" data-target="1247">0</div>
+                <div class="stat-label">Happy Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="stat2" data-target="356">0</div>
+                <div class="stat-label">Projects Launched</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="stat3" data-target="98">0</div>
+                <div class="stat-label">Satisfaction %</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="stat4" data-target="24">0</div>
+                <div class="stat-label">Countries</div>
+            </div>
+        </div>
+    </div>
+    
+    <section class="cta-section">
+        <h2>Ready to build something amazing?</h2>
+        <p>Join thousands of developers who love this modern UI kit. Fully customizable and free to use.</p>
+        <div class="cta-buttons">
+            <button class="btn" onclick="showToast('🎉 Thanks for your interest! Get started today.')">Get Started</button>
+            <button class="btn btn-outline" onclick="showToast('📚 Documentation coming soon!')">Learn More</button>
+        </div>
+    </section>
+    
+    <script>
+        // Theme switching
+        const themes = ['default', 'ocean', 'sunset', 'forest'];
+        let currentThemeIndex = 0;
+        
+        function setTheme(themeName) {
+            document.body.className = '';
+            if (themeName !== 'default') {
+                document.body.classList.add(`theme-${themeName}`);
+            }
+            updateRootVariables();
+        }
+        
+        function updateRootVariables() {
+            const computedStyle = getComputedStyle(document.body);
+            const gradStart = computedStyle.getPropertyValue('--grad-start').trim();
+            const gradEnd = computedStyle.getPropertyValue('--grad-end').trim();
+            // Update any dynamic elements that depend on gradient
+            const btns = document.querySelectorAll('.btn:not(.btn-outline)');
+            btns.forEach(btn => {
+                btn.style.background = `linear-gradient(135deg, ${gradStart}, ${gradEnd})`;
+            });
+        }
+        
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            setTheme(themes[currentThemeIndex]);
+            showToast(`🎨 Theme changed to ${themes[currentThemeIndex] === 'default' ? 'Default Purple' : themes[currentThemeIndex]}!`);
+        });
+        
+        // Live Clock
+        function updateClock() {
+            const now = new Date();
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const timeString = now.toLocaleTimeString('en-US', options);
+            const dateString = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            document.getElementById('liveClock').innerHTML = `🕐 ${dateString} | ${timeString}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+        
+        // Particle System
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            particlesContainer.innerHTML = '';
+            const particleCount = window.innerWidth < 768 ? 30 : 60;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 8 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+        window.addEventListener('resize', createParticles);
+        
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+            
+            // Back to top button visibility
+            const backToTop = document.getElementById('backToTop');
+            if (winScroll > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        // Back to top functionality
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast('⬆️ Back to top!');
+        });
+        
+        // Toast notification system
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Animated stats counter with Intersection Observer
+        function animateNumber(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 20);
+        }
+        
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    const target = parseInt(element.getAttribute('data-target'));
+                    if (!element.classList.contains('animated')) {
+                        element.classList.add('animated');
+                        animateNumber(element, target);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('.stat-number').forEach(stat => {
+            statsObserver.observe(stat);
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    showToast(`📌 Scrolled to ${target.tagName} section`);
+                }
+            });
+        });
+        
+        // Card click effect
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('btn')) {
+                    const title = card.querySelector('h3').textContent;
+                    showToast(`✨ ${title} - Click to explore more!`);
+                }
+            });
+        });
+        
+        // Add floating animation to cards on load
+        window.addEventListener('load', () => {
+            showToast('🎉 Welcome to Cool UI Demo! Explore the features →');
+            
+            // Add ripple effect to all buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.backgroundColor = 'rgba(255,255,255,0.6)';
+                    ripple.style.width = '100px';
+                    ripple.style.height = '100px';
+                    ripple.style.marginLeft = '-50px';
+                    ripple.style.marginTop = '-50px';
+                    ripple.style.pointerEvents = 'none';
+                    ripple.style.animation = 'ripple 0.6s ease-out';
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        });
+        
+        // Add ripple keyframes dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                0% { transform: scale(0); opacity: 0.6; }
+                100% { transform: scale(4); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Parallax effect on hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+                hero.style.opacity = 1 - scrolled / 700;
+            }
+        });
+        
+        // Interactive particle mouse effect
+        document.addEventListener('mousemove', (e) => {
+            const particles = document.querySelectorAll('.particle');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            particles.forEach((particle, index) => {
+                const speed = 0.02;
+                const moveX = (mouseX - 0.5) * speed * 30;
+                const moveY = (mouseY - 0.5) * speed * 30;
+                particle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+        
+        // Dynamic gradient animation on body background (subtle)
+        let hue = 0;
+        function animateGradient() {
+            // Only animate if default theme (optional subtle effect)
+            if (themes[currentThemeIndex] === 'default') {
+                hue = (hue + 0.2) % 360;
+                const color1 = `hsl(${hue}, 70%, 60%)`;
+                const color2 = `hsl(${hue + 40}, 70%, 55%)`;
+                document.body.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+            }
+        }
+        // Uncomment for subtle animated gradient (disabled by default for performance)
+        // setInterval(animateGradient, 100);
+        
+        // Initialize root variables on load
+        updateRootVariables();
+        
+        console.log('✨ Cool UI Demo fully loaded! ✨');
+    </script>
 </body>
 </html>
