@@ -1,6 +1,3 @@
-Kulsum
-
-
 ---
 ## 🚀 Updates
 ### ✨ Features
@@ -23,3 +20,26 @@ Kulsum
 - Improved code formatting for consistency and readability.
 - Removed commented-out code and unnecessary comments.
 - Simplified HTML structure for improved semantic meaning.
+
+---
+## 🚀 Updates
+### ✨ Features
+- Added support for new payment gateways
+- Introduced a new analytics dashboard
+- Enhanced user authentication with two-factor option
+- Implemented a more efficient caching mechanism
+- Improved search functionality with better query handling
+
+### 🛠 Improvements
+- Optimized database queries for faster performance
+- Refactored code to reduce complexity and improve maintainability
+- Improved error handling and logging
+- Enhanced security with additional input validation
+- Simplified build process with automated tasks
+
+### 🐛 Fixes
+- Resolved issue with incorrect date formatting
+- Fixed bug causing incorrect calculation of totals
+- Addressed issue with missing translations
+- Resolved problem with inconsistent formatting
+- Fixed issue with incorrect sorting of results
