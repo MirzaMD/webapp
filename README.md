@@ -1,1 +1,1 @@
-Somethng in tge way she moves
+Somethng in the way she moves
